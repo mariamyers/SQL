@@ -69,6 +69,7 @@ VALUES
 -- Analysis:
 
 -- using PostgreSQL
+-- the following statements allow me to prep for joining the tables and create my queries 
 SELECT count(*) FROM "netflix_people"; -- must use quotations for selecting the tables
 
 SELECT *
@@ -93,25 +94,25 @@ INNER JOIN "netflix_titles_info" titles -- new alias is titles
 ON people.show_id = titles.show_id;
 
 
+-- the following SQL queries was written to answer specific questions
 
 
-
--- How many movie titles are there in the database? (movies only, not tv shows)
+-- 1. How many movie titles are there in the database? (movies only, not tv shows)
 SELECT count(*)
 FROM "netflix_titles_info"
 WHERE type = 'Movie';
 -- In PostgreSQL, you have to use single quotes (') to select strings, because double quotes (") are part of the syntax for the FROM statement.
 
--- When was the most recent batch of tv shows and/or movies added to the database?
+-- 2. When was the most recent batch of tv shows and/or movies added to the database?
 SELECT MAX(date(date_added))
 FROM "netflix_titles_info";
 
--- List all the movies and tv shows in alphabetical order.
+-- 3. List all the movies and tv shows in alphabetical order.
 SELECT title
 FROM "netflix_titles_info"
 ORDER BY title asc;
 
--- Who was the Director for the movie The Starling? 
+-- 4. Who was the Director for the movie The Starling? 
 -- Theodore Melfi	
 SELECT people.director,
 titles.title
@@ -124,7 +125,7 @@ ON people.show_id = titles.show_id
 WHERE titles.title = 'The Starling'; 
 
 
--- What is the oldest movie in the database and what year was it made?
+-- 5. What is the oldest movie in the database and what year was it made?
 -- Sankofa 1993
 SELECT title,
 	release_year
