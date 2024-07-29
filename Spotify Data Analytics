@@ -1,0 +1,234 @@
+-- For this project, I downloaded Spotify data from Kaggle.
+--  Then I created a table and inserted the Spotify data into.
+-- Lastly, I performed analytics on the data using SQL from questions I formulated. 
+
+
+-- Create table
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+
+-- Then I inserted the Spotify Data .csv into the table.
+
+-- SQL Analysis
+-- 1. Who are the top 10 artists based on popularity? 
+SELECT distinct artist_name, AVG(popularity) -- used avg since some artists had multiple top songs
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY AVG(popularity) desc
+LIMIT 10;
+
+-- 2. What are the top 10 songs?
+SELECT artist_name, track_name, popularity 
+FROM BIT_DB.Spotifydata
+ORDER BY popularity desc
+LIMIT 10;
+
+-- 3. Which artist has the most songs?
+-- Olivia Rodgrigo with 4 songs
+SELECT artist_name, COUNT(track_name) AS number_of_songs
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY COUNT(track_name) desc
+LIMIT 1;
+
+-- 4. What is the average popularity, danceability, and energy for each artist?
+SELECT artist_name, 
+    ROUND(AVG(popularity),2), 
+    ROUND(AVG(danceability),2), 
+    ROUND(AVG(energy),2)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY AVG(popularity) desc;
+
+-- 5. What's the average danceability for the 10 most popular songs?
+SELECT ROUND(AVG(popularity),2)
+FROM BIT_DB.Spotifydata
+WHERE popularity >=92; -- top 10 songs are at or above 92 
+
+-- 7. Which songs have the highest and lowest danceability, energy, and valence?
+SELECT MAX(danceability), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+SELECT MIN(danceability), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+SELECT MAX(energy), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+SELECT MIN(energy), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+SELECT MAX(valence), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+SELECT MIN(valence), artist_name, track_name
+FROM BIT_DB.Spotifydata;
+
+-- 8. Which songs have an energy score above 0.8?
+SELECT track_name, artist_name, energy
+FROM BIT_DB.Spotifydata
+WHERE energy > 0.8
+ORDER BY energy desc;
+
+-- Duration Questions
+-- 9. What artist released the longest song? 
+-- Farruko
+SELECT artist_name, track_name, duration_ms
+FROM BIT_DB.Spotifydata
+WHERE duration_ms >= (SELECT MAX(duration_ms)
+			FROM BIT_DB.Spotifydata);
+
+-- 10. What are the longest and shortest songs in terms of duration?
+-- same as above for the longest
+-- Farruko	Pepas	287120
+SELECT artist_name, track_name, duration_ms
+FROM BIT_DB.Spotifydata
+WHERE duration_ms >= (SELECT MAX(duration_ms)
+			FROM BIT_DB.Spotifydata);
+   
+-- for the shortest song
+-- Masked Wolf	Astronaut In The Ocean	132780
+SELECT artist_name, track_name, duration_ms
+FROM BIT_DB.Spotifydata
+WHERE duration_ms <= (SELECT MIN(duration_ms)
+			FROM BIT_DB.Spotifydata);
+
+-- Song Key Questions
+-- 11. What is the most common song key?
+-- the case was made by using pitch-class integer notation: https://smbutterfield.github.io/ibmt17-18/22-intro-to-non-diatonic-materials/b2-tx-pcintnotation.html to determine the key
+-- 7 songs in the C Major Key
+SELECT COUNT(*) AS most_common_song_key,
+    CASE
+        WHEN song_key = 0 AND song_mode = 1 THEN 'C Major'
+        WHEN song_key = 0 AND song_mode = 0 THEN 'C Minor'
+        WHEN song_key = 1 AND song_mode = 1 THEN 'C#/Db Major'
+        WHEN song_key = 1 AND song_mode = 0 THEN 'C#/Db Minor'
+        WHEN song_key = 2 AND song_mode = 1 THEN 'D Major'
+        WHEN song_key = 2 AND song_mode = 0 THEN 'D Minor'
+        WHEN song_key = 3 AND song_mode = 1 THEN 'D#/Eb Major'
+        WHEN song_key = 3 AND song_mode = 0 THEN 'D#/Eb Minor'
+        WHEN song_key = 4 AND song_mode = 1 THEN 'E Major'
+        WHEN song_key = 4 AND song_mode = 0 THEN 'E Minor'
+        WHEN song_key = 5 AND song_mode = 1 THEN 'F Major'
+        WHEN song_key = 5 AND song_mode = 0 THEN 'F Minor'
+        WHEN song_key = 6 AND song_mode = 1 THEN 'F#/Gb Major'
+        WHEN song_key = 6 AND song_mode = 0 THEN 'F#/Gb Minor'
+        WHEN song_key = 7 AND song_mode = 1 THEN 'G Major'
+        WHEN song_key = 7 AND song_mode = 0 THEN 'G Minor'
+        WHEN song_key = 8 AND song_mode = 1 THEN 'G#/Ab Major'
+        WHEN song_key = 8 AND song_mode = 0 THEN 'G#/Ab Minor'
+        WHEN song_key = 9 AND song_mode = 1 THEN 'A Major'
+        WHEN song_key = 9 AND song_mode = 0 THEN 'A Minor'
+        WHEN song_key = 10 AND song_mode = 1 THEN 'A#/Bb Major'
+        WHEN song_key = 10 AND song_mode = 0 THEN 'A#/Bb Minor'
+        WHEN song_key = 11 AND song_mode = 1 THEN 'B Major'
+        WHEN song_key = 11 AND song_mode = 0 THEN 'B Minor'
+        ELSE 'No key detected'
+    END AS key
+FROM BIT_DB.Spotifydata
+GROUP BY key
+HAVING most_common_song_key >= 1
+ORDER BY most_common_song_key DESC
+LIMIT 1;
+
+-- 12. How many songs are there in each key?
+SELECT COUNT(*) AS number_of_songs,
+    CASE
+        WHEN song_key = 0 AND song_mode = 1 THEN 'C Major'
+        WHEN song_key = 0 AND song_mode = 0 THEN 'C Minor'
+        WHEN song_key = 1 AND song_mode = 1 THEN 'C#/Db Major'
+        WHEN song_key = 1 AND song_mode = 0 THEN 'C#/Db Minor'
+        WHEN song_key = 2 AND song_mode = 1 THEN 'D Major'
+        WHEN song_key = 2 AND song_mode = 0 THEN 'D Minor'
+        WHEN song_key = 3 AND song_mode = 1 THEN 'D#/Eb Major'
+        WHEN song_key = 3 AND song_mode = 0 THEN 'D#/Eb Minor'
+        WHEN song_key = 4 AND song_mode = 1 THEN 'E Major'
+        WHEN song_key = 4 AND song_mode = 0 THEN 'E Minor'
+        WHEN song_key = 5 AND song_mode = 1 THEN 'F Major'
+        WHEN song_key = 5 AND song_mode = 0 THEN 'F Minor'
+        WHEN song_key = 6 AND song_mode = 1 THEN 'F#/Gb Major'
+        WHEN song_key = 6 AND song_mode = 0 THEN 'F#/Gb Minor'
+        WHEN song_key = 7 AND song_mode = 1 THEN 'G Major'
+        WHEN song_key = 7 AND song_mode = 0 THEN 'G Minor'
+        WHEN song_key = 8 AND song_mode = 1 THEN 'G#/Ab Major'
+        WHEN song_key = 8 AND song_mode = 0 THEN 'G#/Ab Minor'
+        WHEN song_key = 9 AND song_mode = 1 THEN 'A Major'
+        WHEN song_key = 9 AND song_mode = 0 THEN 'A Minor'
+        WHEN song_key = 10 AND song_mode = 1 THEN 'A#/Bb Major'
+        WHEN song_key = 10 AND song_mode = 0 THEN 'A#/Bb Minor'
+        WHEN song_key = 11 AND song_mode = 1 THEN 'B Major'
+        WHEN song_key = 11 AND song_mode = 0 THEN 'B Minor'
+        ELSE 'No key detected'
+    END AS key
+FROM BIT_DB.Spotifydata
+GROUP BY key
+HAVING number_of_songs >= 1
+ORDER BY number_of_songs DESC;
+
+-- Audio Questions
+-- 13. Which songs have high acousticness and how does this affect their popularity?
+SELECT track_name, artist_name, acousticness, 
+    CASE
+        WHEN acousticness >= 0.66 THEN "High Acousticness"
+        WHEN acousticness >= 0.33 THEN "Medium Acousticness"
+        ELSE "Low Acousticness"
+    END AS acousticness_rating
+FROM BIT_DB.Spotifydata
+WHERE acousticness_rating = "High Acousticness";  
+
+-- 14. Which songs have an acousticness score above 0.5?
+SELECT track_name, artist_name, acousticness, 
+    CASE
+        WHEN acousticness >= 0.66 THEN "High Acousticness"
+        WHEN acousticness >= 0.33 THEN "Medium Acousticness"
+        ELSE "Low Acousticness"
+    END AS acousticness_rating
+FROM BIT_DB.Spotifydata
+WHERE acousticness > 0.5;  
+
+-- 15. How many songs are in major mode (mode = 1) versus minor mode (mode = 0)?
+-- 31	Major, 17	Minor
+SELECT COUNT(*) AS number_of_songs,
+    CASE
+        WHEN song_mode = 1 THEN 'Major'
+        WHEN song_mode = 0 THEN 'Minor'
+        ELSE 'No key detected'
+    END AS mode
+FROM BIT_DB.Spotifydata
+GROUP BY mode
+ORDER BY number_of_songs DESC;
+
+-- 16. What is the average tempo of all the songs?
+-- 120.96
+SELECT ROUND(AVG(tempo),2)
+FROM BIT_DB.Spotifydata;
+
+-- 17. Which songs have a speechiness score above 0.1?
+SELECT track_name, artist_name, speechiness
+FROM BIT_DB.Spotifydata
+WHERE speechiness > 0.1
+ORDER BY speechiness desc;
+
+
+-- 18. Which songs have the highest instrumentalness scores?
+SELECT track_name, artist_name, instrumentalness
+FROM BIT_DB.Spotifydata
+ORDER BY instrumentalness desc
+LIMIT 10;
