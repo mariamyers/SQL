@@ -186,19 +186,19 @@ ORDER BY number_of_songs DESC;
 -- 13. Which songs have high acousticness and how does this affect their popularity?
 SELECT track_name, artist_name, acousticness, 
     CASE
-        WHEN acousticness >= 0.66 THEN "High Acousticness"
-        WHEN acousticness >= 0.33 THEN "Medium Acousticness"
-        ELSE "Low Acousticness"
+        WHEN acousticness >= 0.66 THEN 'High Acousticness'
+        WHEN acousticness >= 0.33 THEN 'Medium Acousticness'
+        ELSE 'Low Acousticness'
     END AS acousticness_rating
 FROM BIT_DB.Spotifydata
-WHERE acousticness_rating = "High Acousticness";  
+WHERE acousticness_rating = 'High Acousticness';  
 
 -- 14. Which songs have an acousticness score above 0.5?
 SELECT track_name, artist_name, acousticness, 
     CASE
-        WHEN acousticness >= 0.66 THEN "High Acousticness"
-        WHEN acousticness >= 0.33 THEN "Medium Acousticness"
-        ELSE "Low Acousticness"
+        WHEN acousticness >= 0.66 THEN 'High Acousticness'
+        WHEN acousticness >= 0.33 THEN 'Medium Acousticness'
+        ELSE 'Low Acousticness'
     END AS acousticness_rating
 FROM BIT_DB.Spotifydata
 WHERE acousticness > 0.5;  
