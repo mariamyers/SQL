@@ -3,6 +3,8 @@ This project features a relational database designed to manage both customer sup
 operations. It integrates employee management, customer relationships, transaction tracking, and a music library, along with dynamic 
 playlist management functionality. The database supports multiple business use cases, including customer service workflows, 
 music discovery, and playlist creation.
+
+Using chinook dataset
 */
 
 -- 
