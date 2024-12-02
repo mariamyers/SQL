@@ -10,3 +10,4 @@ In this portfolio, you’ll find:
 
 As I continue to work through the certification, I’m excited to expand my skills and tackle more complex data analysis challenges. Feel free to explore my projects, offer feedback, or reach out if you’d like to collaborate or discuss any of the work!
 
+Also here is a link to my [Tableau Public Profile](https://public.tableau.com/app/profile/maria.myers/vizzes) if you would like to look at my public vizzes as well. 
