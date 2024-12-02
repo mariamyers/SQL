@@ -13,7 +13,6 @@ As I continue to work through the certification, I’m excited to expand my skil
 
 ### Other Links
 🔮Click on the buttons and they will take you to the pages!
-Also here is a link to my [Tableau Public Profile](https://public.tableau.com/app/profile/maria.myers/vizzes) if you would like to look at my public vizzes as well. </br>
 [![Tableau Public](https://img.shields.io/badge/Tableau-%2301B0F1.svg?style=for-the-badge&logo=tableau&logoColor=white)](https://public.tableau.com/app/profile/maria.myers/vizzes) </br>
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/maria-myers-towson2023/)
 
